@@ -1,8 +1,10 @@
+export type VerificationStatus = 'pending' | 'verified' | 'rejected'
+
 export type Domain = {
   id: string
   domain: string
   isActive: boolean
-  status: 'pending' | 'verified' | 'rejected'
+  status: VerificationStatus
   createdDate: number
 }
 

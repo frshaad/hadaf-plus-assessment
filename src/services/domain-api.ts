@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { Domain, DomainPayload } from '@/types'
+import type { Domain, DomainPayload } from '@/types'
 
 export const domainApi = createApi({
   reducerPath: 'domain',
