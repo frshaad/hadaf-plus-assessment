@@ -1,5 +1,5 @@
 import { MoreOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Menu } from 'antd'
+import { Button, Dropdown, MenuProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 import { DomainTableProps } from '@/components/domain-table'
@@ -65,38 +65,34 @@ export function useDomainColumns({
           record.status === 'verified' ? 'Invalidate' : 'Verify'
         const activateActionText = record.isActive ? 'Deactivate' : 'Activate'
 
-        const menu = (
-          <Menu
-            items={[
-              {
-                key: 'edit',
-                label: 'Edit Domain',
-                onClick: () => onEdit(record),
-              },
-              {
-                key: 'verify',
-                label: verifyActionText,
-                onClick: () => onToggleVerify(record),
-              },
-              {
-                key: 'activate',
-                label: activateActionText,
-                onClick: () => onToggleActivate(record),
-              },
-              {
-                type: 'divider',
-              },
-              {
-                key: 'delete',
-                label: <span className="text-red-500">Delete</span>,
-                onClick: () => onDelete(record),
-              },
-            ]}
-          />
-        )
+        const items: MenuProps['items'] = [
+          {
+            key: 'edit',
+            label: 'Edit Domain',
+            onClick: () => onEdit(record),
+          },
+          {
+            key: 'verify',
+            label: verifyActionText,
+            onClick: () => onToggleVerify(record),
+          },
+          {
+            key: 'activate',
+            label: activateActionText,
+            onClick: () => onToggleActivate(record),
+          },
+          {
+            type: 'divider',
+          },
+          {
+            key: 'delete',
+            label: <span className="text-red-500">Delete</span>,
+            onClick: () => onDelete(record),
+          },
+        ]
 
         return (
-          <Dropdown overlay={menu} trigger={['click']}>
+          <Dropdown menu={{ items }} trigger={['click']}>
             <Button type="text" icon={<MoreOutlined />} />
           </Dropdown>
         )
