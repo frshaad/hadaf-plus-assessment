@@ -8,7 +8,7 @@ export type Domain = {
   createdDate: number
 }
 
-export type DomainPayload = Omit<Domain, '_id'>
+export type DomainPayload = Omit<Domain, 'id'>
 
 export type FetchBaseQueryError = {
   status: number | string
