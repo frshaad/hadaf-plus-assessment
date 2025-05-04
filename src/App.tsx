@@ -1,10 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
-
 import DomainTable from '@/components/domain-table'
 import SortFilter from '@/components/sort-filter'
 import { useGetDomainsQuery } from '@/services/domain-api'
 
+import AddDomainButton from './components/add-domain-button'
 import SearchInput from './components/search-input'
 
 export default function App() {
@@ -19,14 +17,7 @@ export default function App() {
       <h1 className="text-4xl font-bold">Domains</h1>
 
       <section className="flex items-center justify-between gap-2 max-sm:flex-col">
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          size="large"
-          className="max-sm:w-full"
-        >
-          Add Domain
-        </Button>
+        <AddDomainButton />
 
         <div className="flex items-center gap-3 lg:gap-6">
           <SortFilter />
