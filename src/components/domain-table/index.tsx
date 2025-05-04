@@ -1,11 +1,11 @@
 import { Table } from 'antd'
 
+import DomainDrawer from '@/components/domain-drawer'
 import { useDeleteDomainModal } from '@/hooks/use-delete-domain-modal'
 import { useDomainColumns } from '@/hooks/use-domain-columns'
 import { useEditDomain } from '@/hooks/use-edit-domain'
+import { useToggleDomain } from '@/hooks/use-toggle-domain'
 import type { Domain } from '@/types'
-
-import DomainDrawer from '../domain-drawer'
 
 export type DomainTableProps = {
   domains: Domain[]
@@ -20,22 +20,27 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
     closeDrawer,
     onSubmit,
     currentDomain,
-    contextHolder,
+    contextHolder: editContextHolder,
     loading: isEditing,
   } = useEditDomain()
 
+  const {
+    toggleVerification,
+    toggleActivation,
+    contextHolder: toggleContextHolder,
+  } = useToggleDomain()
+
   const columns = useDomainColumns({
     onEdit: showEditDrawer,
-    onDelete: (domain: Domain) => {
-      showDeleteModal(domain)
-    },
-    onToggleVerify: (domain) => console.log('verify', domain),
-    onToggleActivate: (domain) => console.log('activate', domain),
+    onDelete: showDeleteModal,
+    onToggleVerify: toggleVerification,
+    onToggleActivate: toggleActivation,
   })
 
   return (
     <>
-      {contextHolder}
+      {editContextHolder}
+      {toggleContextHolder}
       <Table
         rowKey="_id"
         columns={columns}
