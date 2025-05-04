@@ -13,12 +13,14 @@ export type DomainTableProps = {
 }
 
 export default function DomainTable({ domains, isLoading }: DomainTableProps) {
+  // ========== Hooks ==========
   const { showDeleteModal, DeleteModal } = useDeleteDomainModal()
+
   const {
     showDrawer: showEditDrawer,
     openDrawer,
     closeDrawer,
-    onSubmit,
+    onSubmit: handleUpdateDomain,
     currentDomain,
     contextHolder: editContextHolder,
     loading: isEditing,
@@ -37,10 +39,14 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
     onToggleActivate: toggleActivation,
   })
 
+  // ========== Render ==========
   return (
     <>
+      {/* Toasts / Messages */}
       {editContextHolder}
       {toggleContextHolder}
+
+      {/* Main Table */}
       <Table
         rowKey="_id"
         columns={columns}
@@ -49,11 +55,15 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
         bordered
         pagination={{ pageSize: 10 }}
       />
+
+      {/* Modals */}
       <DeleteModal />
+
+      {/* Drawers */}
       <DomainDrawer
         open={openDrawer}
         onClose={closeDrawer}
-        onSubmit={onSubmit}
+        onSubmit={handleUpdateDomain}
         loading={isEditing}
         defaultValue={currentDomain?.domain}
         type="update"
