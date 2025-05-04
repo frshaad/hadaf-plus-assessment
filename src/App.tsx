@@ -1,12 +1,15 @@
+import AddDomainButton from '@/components/add-domain-button'
 import DomainTable from '@/components/domain-table'
+import SearchInput from '@/components/search-input'
 import SortFilter from '@/components/sort-filter'
+import { useSearchDomains } from '@/hooks/use-search-domains'
 import { useGetDomainsQuery } from '@/services/domain-api'
-
-import AddDomainButton from './components/add-domain-button'
-import SearchInput from './components/search-input'
 
 export default function App() {
   const { data: domains, isError, isLoading } = useGetDomainsQuery()
+
+  const { searchTerm, setSearchTerm, filteredDomains } =
+    useSearchDomains(domains)
 
   if (isError) {
     return <p>Error happened!</p>
@@ -21,11 +24,11 @@ export default function App() {
 
         <div className="flex items-center gap-3 lg:gap-6">
           <SortFilter />
-          <SearchInput />
+          <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </div>
       </section>
 
-      <DomainTable domains={domains ?? []} isLoading={isLoading} />
+      <DomainTable domains={filteredDomains} isLoading={isLoading} />
     </main>
   )
 }
