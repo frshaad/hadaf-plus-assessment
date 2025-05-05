@@ -1,4 +1,6 @@
+import type { InputRef } from 'antd'
 import { Button, Drawer, Form, Input, Space } from 'antd'
+import { useEffect, useRef } from 'react'
 
 type DomainDrawerProps = {
   open: boolean
@@ -20,6 +22,16 @@ export default function DomainDrawer({
   loading,
 }: DomainDrawerProps) {
   const [form] = Form.useForm()
+
+  const inputRef = useRef<InputRef>(null)
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
+    }
+  }, [open])
 
   const handleFinish = async (values: { domain: string }) => {
     await onSubmit(values.domain)
@@ -62,7 +74,7 @@ export default function DomainDrawer({
           label="Domain Name"
           rules={[{ required: true, message: 'Please enter a valid domain' }]}
         >
-          <Input placeholder="yourdomain.com" />
+          <Input ref={inputRef} placeholder="yourdomain.com" />
         </Form.Item>
       </Form>
     </Drawer>
