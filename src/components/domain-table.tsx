@@ -1,4 +1,4 @@
-import { App, Button, Table } from 'antd'
+import { App, Button, Space, Table, Tag, Typography } from 'antd'
 import type {
   FilterValue,
   SorterResult,
@@ -66,11 +66,64 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
     setSortedInfo({})
   }
 
+  const { Text } = Typography
+
+  const getActiveSortAndFilters = () => {
+    const activeFilters = Object.entries(filteredInfo)
+      .filter(([, value]) => value && value.length > 0)
+      .map(([key, value]) => ({
+        key,
+        value: value?.join(', '),
+      }))
+
+    const activeSort = sortedInfo.columnKey
+      ? {
+          column: String(sortedInfo.columnKey),
+          order: sortedInfo.order === 'ascend' ? 'ascending' : 'descending',
+        }
+      : null
+
+    return { activeFilters, activeSort }
+  }
+
   // ========== Render ==========
   return (
     <>
-      <div className="flex justify-end">
-        <Button onClick={clearFilters}>Clear filters and sorters</Button>
+      <div className="mb-4 flex items-center justify-between">
+        <Space size="middle">
+          {getActiveSortAndFilters().activeFilters.length > 0 && (
+            <Space>
+              <Text type="secondary">Filters:</Text>
+              <Space size={[0, 8]} wrap>
+                {getActiveSortAndFilters().activeFilters.map(
+                  ({ key, value }) => (
+                    <Tag key={key} color="blue" className="capitalize">
+                      {key}: {value}
+                    </Tag>
+                  ),
+                )}
+              </Space>
+            </Space>
+          )}
+
+          {getActiveSortAndFilters().activeSort && (
+            <Space>
+              <Text type="secondary">Sort:</Text>
+              <Tag color="purple" className="capitalize">
+                {getActiveSortAndFilters().activeSort?.column}
+                {': '}
+                {getActiveSortAndFilters().activeSort?.order}
+              </Tag>
+            </Space>
+          )}
+        </Space>
+
+        {(Object.keys(filteredInfo).length > 0 ||
+          Object.keys(sortedInfo).length > 0) && (
+          <Button type="link" onClick={clearFilters} size="small" danger>
+            Clear all
+          </Button>
+        )}
       </div>
 
       {/* Main Table */}

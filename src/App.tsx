@@ -3,7 +3,6 @@ import { App as AntApp } from 'antd'
 import AddDomainButton from '@/components/add-domain-button'
 import DomainTable from '@/components/domain-table'
 import SearchInput from '@/components/search-input'
-import SortFilter from '@/components/sort-filter'
 import { useSearchDomains } from '@/hooks/use-search-domains'
 import { useGetDomainsQuery } from '@/services/domain-api'
 
@@ -24,11 +23,7 @@ export default function App() {
 
         <section className="flex items-center justify-between gap-2 max-sm:flex-col">
           <AddDomainButton />
-
-          <div className="flex items-center gap-3 lg:gap-6">
-            <SortFilter />
-            <SearchInput value={searchTerm} onChange={setSearchTerm} />
-          </div>
+          <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </section>
 
         <DomainTable domains={filteredDomains} isLoading={isLoading} />

@@ -15,6 +15,7 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       allowClear
+      className="w-full md:max-w-md"
     />
   )
 }
