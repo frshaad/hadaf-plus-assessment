@@ -2,6 +2,8 @@ import type { InputRef } from 'antd'
 import { Button, Drawer, Form, Input, Space } from 'antd'
 import { useEffect, useRef } from 'react'
 
+const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/i
+
 type DomainDrawerProps = {
   open: boolean
   onClose: () => void
@@ -72,9 +74,26 @@ export default function DomainDrawer({
         <Form.Item
           name="domain"
           label="Domain Name"
-          rules={[{ required: true, message: 'Please enter a valid domain' }]}
+          rules={[
+            { required: true, message: 'Please enter a domain name.' },
+            {
+              validator: (_, value) => {
+                if (!value) {
+                  return Promise.resolve()
+                }
+
+                if (!domainRegex.test(value)) {
+                  return Promise.reject(
+                    new Error('Please enter a valid domain, e.g., example.com'),
+                  )
+                }
+
+                return Promise.resolve()
+              },
+            },
+          ]}
         >
-          <Input ref={inputRef} placeholder="yourdomain.com" />
+          <Input ref={inputRef} autoFocus placeholder="yourdomain.com" />
         </Form.Item>
       </Form>
     </Drawer>
