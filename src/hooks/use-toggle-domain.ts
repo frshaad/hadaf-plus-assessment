@@ -1,11 +1,10 @@
-import { message } from 'antd'
+import type { MessageInstance } from 'antd/es/message/interface'
 
 import { useUpdateDomainMutation } from '@/services/domain-api'
 import type { Domain } from '@/types'
 
-export function useToggleDomain() {
+export function useToggleDomain(messageApi: MessageInstance) {
   const [updateDomain] = useUpdateDomainMutation()
-  const [messageApi, contextHolder] = message.useMessage()
 
   const toggleVerification = async (domain: Domain) => {
     try {
@@ -63,6 +62,5 @@ export function useToggleDomain() {
   return {
     toggleVerification,
     toggleActivation,
-    contextHolder,
   }
 }

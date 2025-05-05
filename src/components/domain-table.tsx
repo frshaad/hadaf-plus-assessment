@@ -1,4 +1,4 @@
-import { Table } from 'antd'
+import { App, Table } from 'antd'
 
 import DomainDrawer from '@/components/domain-drawer'
 import { useDeleteDomainModal } from '@/hooks/use-delete-domain-modal'
@@ -13,6 +13,7 @@ export type DomainTableProps = {
 }
 
 export default function DomainTable({ domains, isLoading }: DomainTableProps) {
+  const { message } = App.useApp()
   // ========== Hooks ==========
   const { showDeleteModal, DeleteModal } = useDeleteDomainModal()
 
@@ -22,15 +23,10 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
     closeDrawer,
     onSubmit: handleUpdateDomain,
     currentDomain,
-    contextHolder: editContextHolder,
     loading: isEditing,
-  } = useEditDomain()
+  } = useEditDomain(message)
 
-  const {
-    toggleVerification,
-    toggleActivation,
-    contextHolder: toggleContextHolder,
-  } = useToggleDomain()
+  const { toggleVerification, toggleActivation } = useToggleDomain(message)
 
   const columns = useDomainColumns({
     onEdit: showEditDrawer,
@@ -43,8 +39,6 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
   return (
     <>
       {/* Toasts / Messages */}
-      {editContextHolder}
-      {toggleContextHolder}
 
       {/* Main Table */}
       <Table

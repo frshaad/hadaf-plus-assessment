@@ -1,3 +1,5 @@
+import { App as AntApp } from 'antd'
+
 import AddDomainButton from '@/components/add-domain-button'
 import DomainTable from '@/components/domain-table'
 import SearchInput from '@/components/search-input'
@@ -16,19 +18,21 @@ export default function App() {
   }
 
   return (
-    <main className="container mx-auto mt-5 space-y-8 max-md:px-2">
-      <h1 className="text-4xl font-bold">Domains</h1>
+    <AntApp>
+      <main className="container mx-auto mt-5 space-y-8 max-md:px-2">
+        <h1 className="text-4xl font-bold">Domains</h1>
 
-      <section className="flex items-center justify-between gap-2 max-sm:flex-col">
-        <AddDomainButton />
+        <section className="flex items-center justify-between gap-2 max-sm:flex-col">
+          <AddDomainButton />
 
-        <div className="flex items-center gap-3 lg:gap-6">
-          <SortFilter />
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
-        </div>
-      </section>
+          <div className="flex items-center gap-3 lg:gap-6">
+            <SortFilter />
+            <SearchInput value={searchTerm} onChange={setSearchTerm} />
+          </div>
+        </section>
 
-      <DomainTable domains={filteredDomains} isLoading={isLoading} />
-    </main>
+        <DomainTable domains={filteredDomains} isLoading={isLoading} />
+      </main>
+    </AntApp>
   )
 }

@@ -1,15 +1,13 @@
-import { message } from 'antd'
+import type { MessageInstance } from 'antd/es/message/interface'
 import { useState } from 'react'
 
 import { useUpdateDomainMutation } from '@/services/domain-api'
 import { Domain } from '@/types'
 
-export function useEditDomain() {
+export function useEditDomain(messageApi: MessageInstance) {
   const [openDrawer, setOpenDrawer] = useState(false)
   const [currentDomain, setCurrentDomain] = useState<Domain | null>(null)
-
   const [updateDomain, { isLoading }] = useUpdateDomainMutation()
-  const [messageApi, contextHolder] = message.useMessage()
 
   const showDrawer = (domain: Domain) => {
     setCurrentDomain(domain)
@@ -53,7 +51,6 @@ export function useEditDomain() {
     closeDrawer,
     onSubmit,
     loading: isLoading,
-    contextHolder,
     currentDomain,
   }
 }
