@@ -9,14 +9,3 @@ export type Domain = {
 }
 
 export type DomainPayload = Omit<Domain, 'id'>
-
-export type FetchBaseQueryError = {
-  status: number | string
-  data: unknown
-}
-
-export type SerializedError = {
-  message?: string
-  name?: string
-  stack?: string
-}
