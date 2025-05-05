@@ -42,7 +42,7 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
 
       {/* Main Table */}
       <Table
-        rowKey="_id"
+        rowKey="id"
         columns={columns}
         dataSource={domains}
         loading={isLoading}
