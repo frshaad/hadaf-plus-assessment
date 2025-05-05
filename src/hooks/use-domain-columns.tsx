@@ -1,6 +1,7 @@
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Dropdown, MenuProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import type { FilterValue, SorterResult } from 'antd/es/table/interface'
 
 import { DomainTableProps } from '@/components/domain-table'
 import type { Domain, VerificationStatus } from '@/types'
@@ -10,6 +11,8 @@ type UseDomainColumnsProps = {
   onDelete: (domain: Domain) => void
   onToggleVerify: (domain: Domain) => void
   onToggleActivate: (domain: Domain) => void
+  sortedInfo: SorterResult<Domain>
+  filteredInfo: Record<string, FilterValue | null>
 }
 
 export function useDomainColumns({
@@ -17,6 +20,8 @@ export function useDomainColumns({
   onEdit,
   onToggleActivate,
   onToggleVerify,
+  sortedInfo = {},
+  filteredInfo = {},
 }: UseDomainColumnsProps) {
   const columns: ColumnsType<DomainTableProps['domains'][number]> = [
     {
@@ -24,6 +29,7 @@ export function useDomainColumns({
       dataIndex: 'domain',
       key: 'domain',
       sorter: (a, b) => a.domain.localeCompare(b.domain),
+      sortOrder: sortedInfo.columnKey === 'domain' ? sortedInfo.order : null,
     },
     {
       title: 'Verification Status',
@@ -39,12 +45,14 @@ export function useDomainColumns({
         { text: 'Verified', value: 'verified' },
         { text: 'Not Verified', value: 'rejected' },
       ],
+      filteredValue: filteredInfo.status || null,
       onFilter: (value, record) => {
         if (value === 'verified') return record.status === 'verified'
         if (value === 'rejected') return record.status !== 'verified'
         return false
       },
       sorter: (a, b) => (a.status > b.status ? 1 : -1),
+      sortOrder: sortedInfo.columnKey === 'status' ? sortedInfo.order : null,
     },
     {
       title: 'Active Status',
@@ -60,12 +68,14 @@ export function useDomainColumns({
         { text: 'Active', value: 'active' },
         { text: 'Not Active', value: 'inactive' },
       ],
+      filteredValue: filteredInfo.isActive || null,
       onFilter: (value, record) => {
         if (value === 'active') return record.isActive === true
         if (value === 'inactive') return record.isActive === false
         return false
       },
       sorter: (a, b) => (a.isActive === b.isActive ? 0 : a.isActive ? -1 : 1),
+      sortOrder: sortedInfo.columnKey === 'isActive' ? sortedInfo.order : null,
     },
     {
       title: 'Date Created',
@@ -78,6 +88,8 @@ export function useDomainColumns({
           day: 'numeric',
         }).format(new Date(timestamp * 1000)),
       sorter: (a, b) => a.createdDate - b.createdDate,
+      sortOrder:
+        sortedInfo.columnKey === 'createdDate' ? sortedInfo.order : null,
     },
     {
       title: 'Actions',

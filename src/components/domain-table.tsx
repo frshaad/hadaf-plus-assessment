@@ -1,4 +1,10 @@
-import { App, Table } from 'antd'
+import { App, Button, Table } from 'antd'
+import type {
+  FilterValue,
+  SorterResult,
+  TablePaginationConfig,
+} from 'antd/es/table/interface'
+import { useState } from 'react'
 
 import DomainDrawer from '@/components/domain-drawer'
 import { useDeleteDomainModal } from '@/hooks/use-delete-domain-modal'
@@ -13,8 +19,15 @@ export type DomainTableProps = {
 }
 
 export default function DomainTable({ domains, isLoading }: DomainTableProps) {
-  const { message } = App.useApp()
+  // ========== State ==========
+  const [filteredInfo, setFilteredInfo] = useState<
+    Record<string, FilterValue | null>
+  >({})
+  const [sortedInfo, setSortedInfo] = useState<SorterResult<Domain>>({})
+
   // ========== Hooks ==========
+  const { message } = App.useApp()
+
   const { showDeleteModal, DeleteModal } = useDeleteDomainModal()
 
   const {
@@ -33,12 +46,32 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
     onDelete: showDeleteModal,
     onToggleVerify: toggleVerification,
     onToggleActivate: toggleActivation,
+    sortedInfo,
+    filteredInfo,
   })
+
+  // ========== Handlers ==========
+  const handleChange = (
+    _pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<Domain> | SorterResult<Domain>[],
+    // Add extra parameter to match the expected signature
+  ) => {
+    setFilteredInfo(filters)
+    setSortedInfo(Array.isArray(sorter) ? sorter[0] : sorter)
+  }
+
+  const clearFilters = () => {
+    setFilteredInfo({})
+    setSortedInfo({})
+  }
 
   // ========== Render ==========
   return (
     <>
-      {/* Toasts / Messages */}
+      <div className="flex justify-end">
+        <Button onClick={clearFilters}>Clear filters and sorters</Button>
+      </div>
 
       {/* Main Table */}
       <Table
@@ -48,6 +81,7 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
         loading={isLoading}
         bordered
         pagination={{ pageSize: 10 }}
+        onChange={handleChange}
       />
 
       {/* Modals */}
