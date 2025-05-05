@@ -44,7 +44,7 @@ export const domainApi = createApi({
       query: ({ id, data }) => ({
         url: `/${id}`,
         method: 'PUT',
-        body: data,
+        body: { isActive: true, ...data },
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Domain', id }],
     }),
