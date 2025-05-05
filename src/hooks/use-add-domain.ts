@@ -22,7 +22,7 @@ export function useAddDomain() {
 
       const data: DomainPayload = {
         domain,
-        isActive: false,
+        isActive: true,
         status: 'pending',
         createdDate: Math.floor(Date.now() / 1000),
       }

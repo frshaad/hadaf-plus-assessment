@@ -33,7 +33,7 @@ export function useEditDomain() {
 
       await updateDomain({
         id: currentDomain.id,
-        data: { domain: updatedDomain },
+        data: { domain: updatedDomain, isActive: true },
       }).unwrap()
 
       messageApi.destroy()
