@@ -118,8 +118,10 @@ export default function DomainTable({ domains, isLoading }: DomainTableProps) {
           )}
         </Space>
 
-        {(Object.keys(filteredInfo).length > 0 ||
-          Object.keys(sortedInfo).length > 0) && (
+        {(Object.values(filteredInfo).some(
+          (v) => v != null && (Array.isArray(v) ? v.length > 0 : true),
+        ) ||
+          (sortedInfo.columnKey && sortedInfo.order)) && (
           <Button type="link" onClick={clearFilters} size="small" danger>
             Clear all
           </Button>

@@ -1,5 +1,5 @@
 import { MoreOutlined } from '@ant-design/icons'
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Button, Dropdown, MenuProps, Radio, Space } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import type { FilterValue, SorterResult } from 'antd/es/table/interface'
 
@@ -35,23 +35,26 @@ export function useDomainColumns({
       title: 'Verification Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: VerificationStatus) =>
-        status == 'verified' ? (
-          <span className="text-[#52c41a]">Verified</span>
-        ) : (
-          <span className="text-[#eb2f96]">Not Verified</span>
-        ),
+      render: (status: VerificationStatus) => {
+        const statusMap = {
+          pending: { text: 'Pending', color: '#faad14' }, // gold
+          verified: { text: 'Verified', color: '#52c41a' }, // green
+          rejected: { text: 'Rejected', color: '#ff4d4f' }, // red
+        }
+        const { text, color } = statusMap[status] || {
+          text: status,
+          color: '#d9d9d9',
+        }
+        return <span style={{ color }}>{text}</span>
+      },
       filters: [
+        { text: 'Pending', value: 'pending' },
         { text: 'Verified', value: 'verified' },
-        { text: 'Not Verified', value: 'rejected' },
+        { text: 'Rejected', value: 'rejected' },
       ],
       filteredValue: filteredInfo.status || null,
-      onFilter: (value, record) => {
-        if (value === 'verified') return record.status === 'verified'
-        if (value === 'rejected') return record.status !== 'verified'
-        return false
-      },
-      sorter: (a, b) => (a.status > b.status ? 1 : -1),
+      onFilter: (value, record) => record.status === value,
+      sorter: (a, b) => a.status.localeCompare(b.status),
       sortOrder: sortedInfo.columnKey === 'status' ? sortedInfo.order : null,
     },
     {
@@ -64,10 +67,41 @@ export function useDomainColumns({
         ) : (
           <span className="text-[#eb2f96]">Not Active</span>
         ),
-      filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Not Active', value: 'inactive' },
-      ],
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Radio.Group
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+              confirm()
+            }}
+          >
+            <Space direction="vertical">
+              <Radio value="active">Active</Radio>
+              <Radio value="inactive">Inactive</Radio>
+            </Space>
+          </Radio.Group>
+          <div style={{ marginTop: 8 }}>
+            <Button
+              onClick={() => {
+                if (clearFilters) {
+                  clearFilters()
+                }
+                confirm()
+              }}
+              size="small"
+              style={{ width: '100%' }}
+            >
+              Reset
+            </Button>
+          </div>
+        </div>
+      ),
       filteredValue: filteredInfo.isActive || null,
       onFilter: (value, record) => {
         if (value === 'active') return record.isActive === true
