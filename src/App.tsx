@@ -1,4 +1,4 @@
-import { App as AntApp } from 'antd'
+import { App as AntApp, Button, Result } from 'antd'
 
 import AddDomainButton from '@/components/add-domain-button'
 import DomainTable from '@/components/domain-table'
@@ -7,13 +7,26 @@ import { useSearchDomains } from '@/hooks/use-search-domains'
 import { useGetDomainsQuery } from '@/services/domain-api'
 
 export default function App() {
-  const { data: domains, isError, isLoading } = useGetDomainsQuery()
+  const { data: domains, isError, isLoading, refetch } = useGetDomainsQuery()
 
   const { searchTerm, setSearchTerm, filteredDomains } =
     useSearchDomains(domains)
 
   if (isError) {
-    return <p>Error happened!</p>
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Result
+          status="error"
+          title="Failed to load domains"
+          subTitle="Something went wrong. Please try again."
+          extra={[
+            <Button type="primary" onClick={() => refetch()} key="retry">
+              Retry
+            </Button>,
+          ]}
+        />
+      </div>
+    )
   }
 
   return (
