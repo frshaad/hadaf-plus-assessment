@@ -3,6 +3,7 @@
 A simple app for managing domains with features like adding, editing, and searching domains. Built with **React**, **TypeScript**, **RTK Query** and **Ant Design**.
 
 ## Features
+
 - Add, Edit, and Delete Domains
 - Domain Name Validation
 - Search and Filter Domains
