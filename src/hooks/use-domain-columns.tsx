@@ -23,6 +23,7 @@ export function useDomainColumns({
       title: 'Domain',
       dataIndex: 'domain',
       key: 'domain',
+      sorter: (a, b) => a.domain.localeCompare(b.domain),
     },
     {
       title: 'Verification Status',
@@ -34,6 +35,16 @@ export function useDomainColumns({
         ) : (
           <span className="text-[#eb2f96]">Not Verified</span>
         ),
+      filters: [
+        { text: 'Verified', value: 'verified' },
+        { text: 'Not Verified', value: 'rejected' },
+      ],
+      onFilter: (value, record) => {
+        if (value === 'verified') return record.status === 'verified'
+        if (value === 'rejected') return record.status !== 'verified'
+        return false
+      },
+      sorter: (a, b) => (a.status > b.status ? 1 : -1),
     },
     {
       title: 'Active Status',
@@ -45,6 +56,16 @@ export function useDomainColumns({
         ) : (
           <span className="text-[#eb2f96]">Not Active</span>
         ),
+      filters: [
+        { text: 'Active', value: 'active' },
+        { text: 'Not Active', value: 'inactive' },
+      ],
+      onFilter: (value, record) => {
+        if (value === 'active') return record.isActive === true
+        if (value === 'inactive') return record.isActive === false
+        return false
+      },
+      sorter: (a, b) => (a.isActive === b.isActive ? 0 : a.isActive ? -1 : 1),
     },
     {
       title: 'Date Created',
@@ -56,6 +77,7 @@ export function useDomainColumns({
           month: 'long',
           day: 'numeric',
         }).format(new Date(timestamp * 1000)),
+      sorter: (a, b) => a.createdDate - b.createdDate,
     },
     {
       title: 'Actions',
